@@ -1,7 +1,7 @@
-# -*-coding:utf-8-*-
-"""author: Zhou Chen
-   datetime: 2019/6/19 18:49
-   desc: 本模块为表情预测处理模块
+"""
+author: Zhou Chen
+datetime: 2019/6/19 18:49
+desc: 本模块为表情预测处理模块
 """
 
 

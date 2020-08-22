@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 import cv2
 from PyQt5 import QtCore, QtGui, QtWidgets
 import matplotlib
@@ -116,7 +115,7 @@ class UI(object):
         self.label_emotion.setText(QtCore.QCoreApplication.translate("Form", emotion))
         # 显示emoji
         if emotion != 'no':
-            img = cv2.imread('../images/' + str(emotion) + '.png')
+            img = cv2.imread('../icons/' + str(emotion) + '.png')
             frame = cv2.resize(cv2.cvtColor(img, cv2.COLOR_BGR2RGB), (100, 100))
             self.label_rst.setPixmap(QtGui.QPixmap.fromImage(
                 QtGui.QImage(frame.data, frame.shape[1], frame.shape[0], 3 * frame.shape[1],

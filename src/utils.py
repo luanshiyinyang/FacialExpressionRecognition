@@ -1,8 +1,9 @@
-# -*-coding:utf-8-*-
-"""author: Zhou Chen
-   datetime: 2019/6/18 17:39
-   desc: 一些工具库
 """
+author: Zhou Chen
+datetime: 2019/6/18 17:39
+desc: 一些工具库
+"""
+from tensorflow.keras.preprocessing.image import load_img, img_to_array
 
 
 def get_fer2013_images():
@@ -108,7 +109,7 @@ def get_jaffe_images():
             images.append(img_roi)
 
         # 若不裁减，即原数据集
-        # images.append(cv2.resize(img_gray, (48, 48)))
+        # icons.append(cv2.resize(img_gray, (48, 48)))
 
         index += 1
     if not os.path.exists('../data/jaffe/Training'):
@@ -159,7 +160,6 @@ def load_test_image(path):
     :param path:
     :return:
     """
-    from keras.preprocessing.image import load_img, img_to_array
     img = load_img(path, target_size=(48, 48), color_mode="grayscale")
     img = img_to_array(img) / 255.
     return img

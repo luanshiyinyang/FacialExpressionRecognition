@@ -1,20 +1,21 @@
-# -*-coding:utf-8-*-
-"""author: Zhou Chen
-   datetime: 2019/6/18 17:35
-   desc: 读取数据集
+
+"""
+author: Zhou Chen
+datetime: 2019/6/18 17:35
+desc: 读取数据集
 """
 from tqdm import tqdm
 import os
 import numpy as np
-from keras.preprocessing.image import img_to_array, load_img
+from tensorflow.keras.preprocessing.image import img_to_array, load_img
 
 
 class Fer2013(object):
-    def __init__(self):
+    def __init__(self, folder="./dataset/fer2013"):
         """
         构造函数
         """
-        self.folder = '../data/fer2013'
+        self.folder = folder
 
     def gen_train(self):
         """
@@ -172,7 +173,7 @@ class Jaffe(object):
     Jaffe没有测试数据，需要自己划分
     """
     def __init__(self):
-        self.folder = '../data/jaffe'
+        self.folder = './dataset/jaffe'
 
     def gen_train(self):
         """
@@ -237,7 +238,7 @@ class CK(object):
     CK+没有测试数据，需要自己划分
     """
     def __init__(self):
-        self.folder = '../data/ck+'
+        self.folder = './dataset/ck+'
 
     def gen_train(self):
         """

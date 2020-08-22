@@ -1,6 +1,6 @@
+tensorflow-gpu==2.3.0
 numpy
 opencv-python
-keras
 pandas
 scipy
 tqdm
@@ -9,4 +9,5 @@ pillow
 pyqt5
 sklearn
 scikit-image
-dlib
+dlib==19.6.1
+jupyter

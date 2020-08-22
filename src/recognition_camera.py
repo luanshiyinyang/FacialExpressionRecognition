@@ -1,8 +1,19 @@
-# -*-coding:utf-8-*-
-"""author: Zhou Chen
-   datetime: 2019/6/20 15:44
-   desc: 利用摄像头实时检测
 """
+author: Zhou Chen
+datetime: 2019/6/20 15:44
+desc: 利用摄像头实时检测
+"""
+import os
+import argparse
+os.environ["TF_CPP_MIN_LOG_LEVEL"] = "2"
+import cv2
+import numpy as np
+from model import CNN2, CNN3
+from utils import index2emotion, cv2_img_add_text
+
+parser = argparse.ArgumentParser()
+parser.add_argument("--source", type=int, default=0, dest="data source, 0 for camera 1 for video")
+parser.add_argument("--vido_path", type=str, default="./input/demo.mp4")
 
 
 def load_model():
@@ -10,7 +21,6 @@ def load_model():
     加载本地模型
     :return:
     """
-    from model import CNN2, CNN3
     model = CNN3()
     model.load_weights('../models/cnn3_best_weights.h5')
     return model
@@ -45,9 +55,6 @@ def predict_expression():
     实时预测
     :return:
     """
-    import cv2
-    from utils import index2emotion, cv2_img_add_text
-    import numpy as np
     # 参数设置
     model = load_model()
 

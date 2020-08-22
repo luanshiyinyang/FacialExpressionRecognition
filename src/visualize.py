@@ -50,6 +50,29 @@ def plot_acc(his):
     plt.show()
 
 
+def plot_feature_map():
+    from model import CNN3
+    model = CNN3()
+    model.load_weights('../models/cnn3_best_weights.h5')
+
+    def get_feature_map(model, layer_index, channels, input_img):
+        from tensorflow.keras import backend as K
+        layer = K.function([model.layers[0].input], [model.layers[layer_index].output])
+        feature_map = layer([input_img])[0]
+        import matplotlib.pyplot as plt
+        plt.figure(figsize=(20, 8))
+        for i in range(channels):
+            img = feature_map[:, :, :, i]
+            plt.subplot(4, 8, i + 1)
+            plt.imshow(img[0], cmap='gray')
+        plt.savefig('rst.png')
+        plt.show()
+        import cv2
+        img = cv2.cvtColor(cv2.imread('../data/demo.jpg'), cv2.cv2.COLOR_BGR2GRAY)
+        img.shape = (1, 48, 48, 1)
+        get_feature_map(model, 4, 32, img)
+
+
 if __name__ == '__main__':
     import numpy as np
     history = load_file('../train_results/his_cnn2.pkl')
