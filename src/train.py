@@ -112,6 +112,8 @@ else:
                                          zoom_range=0.2).flow(x_train, y_train, batch_size=opt.batch_size)
     valid_generator = ImageDataGenerator().flow(x_valid, y_valid, batch_size=opt.batch_size)
     model = CNN3()
+    sgd = SGD(lr=0.01, decay=1e-6, momentum=0.9, nesterov=True)
+    model.compile(optimizer=sgd, loss='categorical_crossentropy', metrics=['accuracy'])
     callback = [
         #     EarlyStopping(monitor='val_loss', patience=50, verbose=True),
         #     ReduceLROnPlateau(monitor='lr', factor=0.1, patience=15, verbose=True),
@@ -123,7 +125,7 @@ else:
     his = history_ck
 
 if opt.plot_history:
-    plot_loss(his)
-    plot_acc(his)
+    plot_loss(his.history, opt.dataset)
+    plot_acc(his.history, opt.dataset)
 
 

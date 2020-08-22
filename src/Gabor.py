@@ -1,7 +1,7 @@
-# -*-coding:utf-8-*-
-"""author: Zhou Chen
-   datetime: 2019/7/1 16:54
-   desc: 利用Gabor滤波尝试实现
+"""
+author: Zhou Chen
+datetime: 2019/7/1 16:54
+desc: 利用Gabor滤波尝试实现
 """
 
 import cv2

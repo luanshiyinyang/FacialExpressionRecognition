@@ -1,7 +1,7 @@
-# -*-coding:utf-8-*-
-"""author: Zhou Chen
-   datetime: 2019/7/1 17:10
-   desc: 用于图片预处理，神经网络没有用到这部分
+"""
+author: Zhou Chen
+datetime: 2019/7/1 17:10
+desc: 用于图片预处理，神经网络没有用到这部分
 """
 import matplotlib.pyplot as plt
 import numpy as np

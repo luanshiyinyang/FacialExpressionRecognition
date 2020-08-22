@@ -1,7 +1,7 @@
-# -*-coding:utf-8-*-
-"""author: Zhou Chen
-   datetime: 2019/6/18 17:06
-   desc: 构建CNN模型
+"""
+author: Zhou Chen
+datetime: 2019/6/18 17:06
+desc: 构建CNN模型
 """
 from tensorflow.keras.layers import Input, Conv2D, MaxPooling2D, Dropout, BatchNormalization, Flatten, Dense, AveragePooling2D
 from tensorflow.keras.models import Model

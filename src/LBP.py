@@ -1,7 +1,7 @@
-# -*-coding:utf-8-*-
-"""author: Zhou Chen
-   datetime: 2019/7/1 20:24
-   desc: 使用LBP的实现
+"""
+author: Zhou Chen
+datetime: 2019/7/1 20:24
+desc: 使用LBP的实现
 """
 
 

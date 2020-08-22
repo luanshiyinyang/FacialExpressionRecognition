@@ -1,7 +1,7 @@
-# -*-coding:utf-8-*-
-"""author: Zhou Chen
-   datetime: 2019/6/23 15:59
-   desc: the project
+"""
+author: Zhou Chen
+datetime: 2019/6/23 15:59
+desc: the project
 """
 
 

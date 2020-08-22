@@ -1,7 +1,7 @@
-# 表情识别
+# 人脸表情识别
 
 
-> 2020.8.22，重构了整个仓库代码，改用Tensorflow2中的keras api实现整个系统。考虑到很多反应jupyter notebook写的train不太方便，这里改成了py脚本实现。
+> 2020.8.22，重构了整个仓库代码，改用Tensorflow2中的keras api实现整个系统。考虑到很多反映jupyter notebook写的train使用起来不太方便，这里改成了py脚本实现。
 
 
 ## 简介
@@ -9,7 +9,7 @@
 
 
 ## 环境部署
-基于Python3和Keras2（TensorFlow后端），具体依赖安装如下(推荐使用conda或者venv虚拟环境)。
+基于Python3和Keras2（TensorFlow后端），具体依赖安装如下(推荐使用conda虚拟环境)。
 ```shell script
 git clone https://github.com/luanshiyinyang/FacialExpressionRecognition.git
 cd FacialExpressionRecognition
@@ -54,25 +54,44 @@ pip install -r requirements.txt
 ## 模型训练
 主要在FER2013、JAFFE、CK+上进行训练，JAFFE给出的是半身图因此做了人脸检测。最后在FER2013上Pub Test和Pri Test均达到67%左右准确率（该数据集爬虫采集存在标签错误、水印、动画图片等问题），JAFFE和CK+5折交叉验证均达到99%左右准确率（这两个数据集为实验室采集，较为准确标准）。
 
-训练过程见train.ipynb文件
-![](/asset/loss.png)
+执行下面的命令将在指定的数据集（fer2013或jaffe或ck+）上按照指定的batch_size训练指定的轮次。训练会生成对应的可视化训练过程，下图为在三个数据集上训练过程的共同绘图。
+
+```shell
+python src/train.py --dataset fer2013 --epochs 300 --batch_size 32
+```
+![](./assets/loss.png)
 
 
 ## 模型应用
-与传统方法相比，卷积神经网络表现更好，使用该模型构建识别系统，提供GUI界面和摄像头实时检测（摄像必须保证补光足够）。预测时对一张图片进行水平翻转、偏转15度、平移等增广得到多个概率分布，将这些概率分布加权求和得到最后的概率分布，此时概率最大的作为标签。
+与传统方法相比，卷积神经网络表现更好，使用该模型构建识别系统，提供**GUI界面和摄像头实时检测**（摄像必须保证补光足够）。预测时对一张图片进行水平翻转、偏转15度、平移等增广得到多个概率分布，将这些概率分布加权求和得到最后的概率分布，此时概率最大的作为标签（也就是使用了推理数据增强）。
 
-注意，**GUI预测只显示最可能是人脸的那个表情，但是对所有检测到的人脸都会框定预测结果并在图片上标记，标记后的图片在results目录下**。
+### **GUI界面**
 
-- GUI界面
-	- 运行scripts下的gui.py即可（图片来自百度，侵删。）
-	- 效果图
-    	- ![](./asset/rst_gui.png)
-    	- ![](./asset/rst_gui2.png)
-- 实时检测
-	- 运行scripts下的recognition_camera.py即可
-	- 效果图（图片来自百度，侵删。）
-		- 演示不便
+注意，**GUI界面预测只显示最可能是人脸的那个脸表情，但是对所有检测到的人脸都会框定预测结果并在图片上标记，标记后的图片在output目录下。**
 
+执行下面的命令即可打开GUI程序，该程序依赖PyQT设计，在一个测试图片（来源于网络）上进行测试效果如下图。
 
-## 补充说明
-具体项目代码、数据集、模型已经开源于我的Github，欢迎Star或者Fork。
+```shell
+python src/gui.py
+```
+![](./assets/gui.png)
+
+上图的GUI反馈的同时，会对图片上每个人脸进行检测并表情识别，处理后如下图。
+
+![](./assets/rst.png)
+
+### **实时检测**
+实时检测基于Opencv进行设计，旨在用摄像头对实时视频流进行预测，同时考虑到有些人的反馈，当没有摄像头想通过视频进行测试则修改命令行参数即可。
+
+使用下面的命令会打开摄像头进行实时检测（ESC键退出），若要指定视频进行进行检测，则使用下面的第二个命令。
+```shell
+python src/recognition_camera.py
+```
+
+```shell
+python src/recognition_camera.py --source 1 --video_path 视频绝对路径或者相对于该项目的根目录的相对路径
+```
+
+下图是动态演示的在Youtube上[某个视频](https://www.youtube.com/watch?v=r5Z741PC9_c)上的识别结果。
+
+![](./assets/demo.gif)

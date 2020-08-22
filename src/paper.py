@@ -1,7 +1,7 @@
-# -*-coding:utf-8-*-
-"""author: Zhou Chen
-   datetime: 2019/6/26 14:26
-   desc: 绘制小论文部分图像
+"""
+author: Zhou Chen
+datetime: 2019/6/26 14:26
+desc: 绘制小论文部分图像
 """
 import numpy as np
 

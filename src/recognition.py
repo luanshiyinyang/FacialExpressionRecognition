@@ -3,6 +3,11 @@ author: Zhou Chen
 datetime: 2019/6/19 18:49
 desc: 本模块为表情预测处理模块
 """
+import os
+import cv2
+import numpy as np
+from utils import index2emotion, expression_analysis, cv2_img_add_text
+
 
 
 def face_detect(img_path):
@@ -11,8 +16,8 @@ def face_detect(img_path):
     :param img_path: 图片的完整路径
     :return:
     """
-    import cv2
-    face_cascade = cv2.CascadeClassifier('../data/params/haarcascade_frontalface_alt.xml')
+
+    face_cascade = cv2.CascadeClassifier('./dataset/params/haarcascade_frontalface_alt.xml')
     img = cv2.imread(img_path)
 
     img_gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
@@ -32,8 +37,6 @@ def generate_faces(face_img, img_size=48):
     :param img_size: 目标图片大小
     :return:
     """
-    import cv2
-    import numpy as np
     face_img = face_img / 255.
     face_img = cv2.resize(face_img, (img_size, img_size), interpolation=cv2.INTER_LINEAR)
     resized_images = list()
@@ -60,9 +63,6 @@ def predict_expression(img_path, model):
     :param img_path:
     :return:
     """
-    import numpy as np
-    from utils import index2emotion, expression_analysis, cv2_img_add_text
-    import cv2
 
     border_color = (0, 0, 0)  # 黑框框
     font_color = (255, 255, 255)  # 白字字
@@ -85,7 +85,9 @@ def predict_expression(img_path, model):
         img = cv2_img_add_text(img, emotion, x + 30, y + 30, font_color, 20)
         emotions.append(emotion)
         result_possibilitys.append(result_sum)
-    cv2.imwrite('../results/rst_border.png', img)
+    if not os.path.exists("./output"):
+        os.makedirs("./output")
+    cv2.imwrite('./output/rst.png', img)
     return emotions[0], result_possibilitys[0]
 
 

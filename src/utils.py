@@ -206,7 +206,7 @@ def cv2_img_add_text(img, text, left, top, text_color=(0, 255, 0), text_size=20)
         img = Image.fromarray(cv2.cvtColor(img, cv2.COLOR_BGR2RGB))
     draw = ImageDraw.Draw(img)
     font_text = ImageFont.truetype(
-        "../fonts/simsun.ttc", text_size, encoding="utf-8")  # 使用宋体
+        "./assets/simsun.ttc", text_size, encoding="utf-8")  # 使用宋体
     draw.text((left, top), text, text_color, font=font_text)
     return cv2.cvtColor(np.array(img), cv2.COLOR_RGB2BGR)
 
@@ -218,7 +218,7 @@ def get_faces_from_gray_image(img_path):
     :return:
     """
     import cv2
-    face_cascade = cv2.CascadeClassifier('../data/params/haarcascade_frontalface_alt.xml')
+    face_cascade = cv2.CascadeClassifier('./dataset/params/haarcascade_frontalface_alt.xml')
     img = cv2.imread(img_path)
 
     img_gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)

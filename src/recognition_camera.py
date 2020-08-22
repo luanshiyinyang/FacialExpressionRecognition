@@ -12,8 +12,14 @@ from model import CNN2, CNN3
 from utils import index2emotion, cv2_img_add_text
 
 parser = argparse.ArgumentParser()
-parser.add_argument("--source", type=int, default=0, dest="data source, 0 for camera 1 for video")
-parser.add_argument("--vido_path", type=str, default="./input/demo.mp4")
+parser.add_argument("--source", type=int, default=0, help="data source, 0 for camera 1 for video")
+parser.add_argument("--video_path", type=str, default=None)
+opt = parser.parse_args()
+
+if opt.source == 1 and opt.video_path is not None:
+    filename = opt.video_path
+else:
+    filename = None
 
 
 def load_model():
@@ -22,7 +28,7 @@ def load_model():
     :return:
     """
     model = CNN3()
-    model.load_weights('../models/cnn3_best_weights.h5')
+    model.load_weights('./models/cnn3_best_weights.h5')
     return model
 
 
@@ -33,8 +39,7 @@ def generate_faces(face_img, img_size=48):
     :param img_size: 目标图片大小
     :return:
     """
-    import cv2
-    import numpy as np
+
     face_img = face_img / 255.
     face_img = cv2.resize(face_img, (img_size, img_size), interpolation=cv2.INTER_LINEAR)
     resized_images = list()
@@ -61,11 +66,14 @@ def predict_expression():
     border_color = (0, 0, 0)  # 黑框框
     font_color = (255, 255, 255)  # 白字字
     capture = cv2.VideoCapture(0)  # 指定0号摄像头
+    if filename:
+        capture = cv2.VideoCapture(filename)
 
     while True:
         _, frame = capture.read()  # 读取一帧视频，返回是否到达视频结尾的布尔值和这一帧的图像
+        frame = cv2.cvtColor(cv2.resize(frame, (800, 600)), cv2.COLOR_BGR2RGB)
         frame_gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)  # 灰度化
-        cascade = cv2.CascadeClassifier('../data/params/haarcascade_frontalface_alt.xml')  # 检测人脸
+        cascade = cv2.CascadeClassifier('./dataset/params/haarcascade_frontalface_alt.xml')  # 检测人脸
         # 利用分类器识别出哪个区域为人脸
         faces = cascade.detectMultiScale(frame_gray, scaleFactor=1.1, minNeighbors=1, minSize=(120, 120))
         # 如果检测到人脸

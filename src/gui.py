@@ -1,7 +1,9 @@
 import sys
+import os
+os.environ["TF_CPP_MIN_LOG_LEVEL"] = "2"
 from PyQt5 import QtWidgets
 
-sys.path.append('ui')
+sys.path.append(os.path.dirname(__file__) + '/ui')
 from ui import UI
 
 
@@ -12,7 +14,7 @@ def load_cnn_model():
     """
     from model import CNN3
     model = CNN3()
-    model.load_weights('../models/cnn3_best_weights.h5')
+    model.load_weights('./models/cnn3_best_weights.h5')
     return model
 
 

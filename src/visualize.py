@@ -1,8 +1,9 @@
-# -*-coding:utf-8-*-
-"""author: Zhou Chen
-   datetime: 2019/6/23 12:49
-   desc: 可视化训练过程
 """
+author: Zhou Chen
+datetime: 2019/6/23 12:49
+desc: 可视化训练过程
+"""
+import numpy as np
 
 
 def load_file(filename):
@@ -18,7 +19,7 @@ def load_file(filename):
     return data.history
 
 
-def plot_loss(his):
+def plot_loss(his, ds):
     """
 
     :param his:
@@ -28,13 +29,12 @@ def plot_loss(his):
     plt.figure(figsize=(12, 8))
     plt.plot(np.arange(len(his['loss'])), his['loss'], label='train loss')
     plt.plot(np.arange(len(his['val_loss'])), his['val_loss'], label='valid loss')
-    plt.title('loss')
+    plt.title(ds + ' training loss')
     plt.legend(loc='best')
-    plt.savefig('../train_results/loss_cnn2.png')
-    plt.show()
+    plt.savefig('./assets/his_loss.png')
 
 
-def plot_acc(his):
+def plot_acc(his, ds):
     """
 
     :param his:
@@ -42,12 +42,11 @@ def plot_acc(his):
     """
     import matplotlib.pyplot as plt
     plt.figure(figsize=(12, 8))
-    plt.plot(np.arange(len(his['acc'])), his['acc'], label='train accuracy')
-    plt.plot(np.arange(len(his['val_acc'])), his['val_acc'], label='valid accuracy')
-    plt.title('accuracy')
+    plt.plot(np.arange(len(his['accuracy'])), his['accuracy'], label='train accuracy')
+    plt.plot(np.arange(len(his['val_accuracy'])), his['val_accuracy'], label='valid accuracy')
+    plt.title(ds + ' training accuracy')
     plt.legend(loc='best')
-    plt.savefig('../train_results/accuracy_cnn2.png')
-    plt.show()
+    plt.savefig('./assets/his_acc.png')
 
 
 def plot_feature_map():
@@ -77,5 +76,5 @@ if __name__ == '__main__':
     import numpy as np
     history = load_file('../train_results/his_cnn2.pkl')
     print(np.max(history['val_acc']))
-    plot_loss(history)
-    plot_acc(history)
+    plot_loss(history, "fer")
+    plot_acc(history, "fer")
