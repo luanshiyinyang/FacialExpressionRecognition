@@ -7,7 +7,7 @@ os.environ["TF_CPP_MIN_LOG_LEVEL"] = "2"
 
 from tensorflow.keras.utils import to_categorical
 from tensorflow.keras.callbacks import EarlyStopping, ReduceLROnPlateau, ModelCheckpoint
-from tensorflow.keras.optimizers import SGD
+from tensorflow.keras.optimizers import SGD, Adam
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 import numpy as np
 from sklearn.model_selection import train_test_split
@@ -43,7 +43,7 @@ if opt.dataset == "fer2013":
     callback = [
         #     EarlyStopping(monitor='val_loss', patience=50, verbose=True),
         #     ReduceLROnPlateau(monitor='lr', factor=0.1, patience=20, verbose=True),
-        ModelCheckpoint('../models/cnn2_best_weights.h5', monitor='val_acc', verbose=True, save_best_only=True,
+        ModelCheckpoint('./models/cnn2_best_weights.h5', monitor='val_acc', verbose=True, save_best_only=True,
                         save_weights_only=True)]
 
     train_generator = ImageDataGenerator(rotation_range=10,
@@ -76,24 +76,24 @@ elif opt.dataset == "jaffe":
     x_train, x_valid, y_train, y_valid = train_test_split(x, y, test_size=0.2, random_state=2019)
     print("load jaffe dataset successfully, it has {} train images and {} valid iamges".format(y_train.shape[0],
                                                                                                  y_valid.shape[0]))
-    train_generator = ImageDataGenerator(rotation_range=10,
-                                         width_shift_range=0.05,
-                                         height_shift_range=0.05,
+    train_generator = ImageDataGenerator(rotation_range=5,
+                                         width_shift_range=0.01,
+                                         height_shift_range=0.01,
                                          horizontal_flip=True,
-                                         shear_range=0.2,
-                                         zoom_range=0.2).flow(x_train, y_train, batch_size=opt.batch_size)
+                                         shear_range=0.1,
+                                         zoom_range=0.1).flow(x_train, y_train, batch_size=opt.batch_size)
     valid_generator = ImageDataGenerator().flow(x_valid, y_valid, batch_size=opt.batch_size)
 
     model = CNN3()
 
-    sgd = SGD(lr=0.01, decay=1e-6, momentum=0.9, nesterov=True)
+    sgd = Adam(lr=0.0001)
     model.compile(optimizer=sgd, loss='categorical_crossentropy', metrics=['accuracy'])
     callback = [
-        #     EarlyStopping(monitor='val_loss', patience=50, verbose=True),
-        #     ReduceLROnPlateau(monitor='lr', factor=0.1, patience=15, verbose=True),
-        ModelCheckpoint('../models/cnn3_best_weights.h5', monitor='val_acc', verbose=True, save_best_only=True,
+        # EarlyStopping(monitor='val_loss', patience=50, verbose=True),
+        # ReduceLROnPlateau(monitor='lr', factor=0.1, patience=15, verbose=True),
+        ModelCheckpoint('./models/cnn3_best_weights.h5', monitor='val_accuracy', verbose=True, save_best_only=True,
                         save_weights_only=True)]
-    history_jaffe = model.fit_generator(train_generator, steps_per_epoch=len(y_train) // opt.batch_size, epochs=opt.epochs,
+    history_jaffe = model.fit(train_generator, steps_per_epoch=len(y_train) // opt.batch_size, epochs=opt.epochs,
                                         validation_data=valid_generator, validation_steps=len(y_valid) // opt.batch_size,
                                         callbacks=callback)
     his = history_jaffe
@@ -117,7 +117,7 @@ else:
     callback = [
         #     EarlyStopping(monitor='val_loss', patience=50, verbose=True),
         #     ReduceLROnPlateau(monitor='lr', factor=0.1, patience=15, verbose=True),
-        ModelCheckpoint('../models/cnn3_best_weights.h5', monitor='val_acc', verbose=True, save_best_only=True,
+        ModelCheckpoint('./models/cnn3_best_weights.h5', monitor='val_acc', verbose=True, save_best_only=True,
                         save_weights_only=True)]
     history_ck = model.fit_generator(train_generator, steps_per_epoch=len(y_train) // opt.batch_size, epochs=opt.epochs,
                                      validation_data=valid_generator, validation_steps=len(y_valid) // opt.batch_size,
