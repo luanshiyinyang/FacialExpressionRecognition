@@ -139,17 +139,7 @@ class UI(object):
         :param img_path:
         :return:
         """
-        import cv2
-        face_cascade = cv2.CascadeClassifier('../data/params/haarcascade_frontalface_alt.xml')
-        img = cv2.imread(img_path)
-
-        img_gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-        faces = face_cascade.detectMultiScale(
-            img_gray,
-            scaleFactor=1.1,
-            minNeighbors=1,
-            minSize=(30, 30)
-        )
+        img, img_gray, faces = face_detect(img_path, 'blazeface')
         if len(faces) == 0:
             return None
         # 遍历每一个脸

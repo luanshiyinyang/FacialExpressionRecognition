@@ -1,6 +1,6 @@
 tensorflow-gpu==2.3.1
 numpy
-opencv-python
+opencv-python==3.4.4.19
 pandas
 scipy
 tqdm

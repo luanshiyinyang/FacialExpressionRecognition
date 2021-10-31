@@ -7,26 +7,31 @@ import os
 import cv2
 import numpy as np
 from utils import index2emotion, expression_analysis, cv2_img_add_text
+from blazeface import blaze_detect
 
 
 
-def face_detect(img_path):
+def face_detect(img_path, model_selection="default"):
     """
     检测测试图片的人脸
     :param img_path: 图片的完整路径
     :return:
     """
-
-    face_cascade = cv2.CascadeClassifier('./dataset/params/haarcascade_frontalface_alt.xml')
     img = cv2.imread(img_path)
-
     img_gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-    faces = face_cascade.detectMultiScale(
-        img_gray,
-        scaleFactor=1.1,
-        minNeighbors=1,
-        minSize=(30, 30)
-    )
+    if model_selection == "default":
+        face_cascade = cv2.CascadeClassifier('./dataset/params/haarcascade_frontalface_alt.xml')
+        faces = face_cascade.detectMultiScale(
+            img_gray,
+            scaleFactor=1.1,
+            minNeighbors=1,
+            minSize=(30, 30)
+        )
+    elif model_selection == "blazeface":
+        faces = blaze_detect(img)
+    else:
+        raise NotImplementedError("this face detector is not supported now!!!")
+
     return img, img_gray, faces
 
 
@@ -67,7 +72,7 @@ def predict_expression(img_path, model):
     border_color = (0, 0, 0)  # 黑框框
     font_color = (255, 255, 255)  # 白字字
 
-    img, img_gray, faces = face_detect(img_path)
+    img, img_gray, faces = face_detect(img_path, 'blazeface')
     if len(faces) == 0:
         return 'no', [0, 0, 0, 0, 0, 0, 0, 0]
     # 遍历每一个脸
@@ -81,6 +86,7 @@ def predict_expression(img_path, model):
         result_sum = np.sum(results, axis=0).reshape(-1)
         label_index = np.argmax(result_sum, axis=0)
         emotion = index2emotion(label_index, 'en')
+        
         cv2.rectangle(img, (x - 10, y - 10), (x + w + 10, y + h + 10), border_color, thickness=2)
         img = cv2_img_add_text(img, emotion, x + 30, y + 30, font_color, 20)
         emotions.append(emotion)
@@ -94,5 +100,5 @@ def predict_expression(img_path, model):
 if __name__ == '__main__':
     from model import CNN3
     model = CNN3()
-    model.load_weights('../models/cnn3_best_model_weights.h5')
-    predict_expression('../data/test/happy2.png', model)
+    model.load_weights('./models/cnn3_best_weights.h5')
+    predict_expression('./input/test/happy2.png', model)

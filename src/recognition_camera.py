@@ -10,6 +10,7 @@ import cv2
 import numpy as np
 from model import CNN2, CNN3
 from utils import index2emotion, cv2_img_add_text
+from blazeface import blaze_detect
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--source", type=int, default=0, help="data source, 0 for camera 1 for video")
@@ -73,11 +74,12 @@ def predict_expression():
         _, frame = capture.read()  # 读取一帧视频，返回是否到达视频结尾的布尔值和这一帧的图像
         frame = cv2.cvtColor(cv2.resize(frame, (800, 600)), cv2.COLOR_BGR2RGB)
         frame_gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)  # 灰度化
-        cascade = cv2.CascadeClassifier('./dataset/params/haarcascade_frontalface_alt.xml')  # 检测人脸
-        # 利用分类器识别出哪个区域为人脸
-        faces = cascade.detectMultiScale(frame_gray, scaleFactor=1.1, minNeighbors=1, minSize=(120, 120))
+        # cascade = cv2.CascadeClassifier('./dataset/params/haarcascade_frontalface_alt.xml')  # 检测人脸
+        # # 利用分类器识别出哪个区域为人脸
+        # faces = cascade.detectMultiScale(frame_gray, scaleFactor=1.1, minNeighbors=1, minSize=(120, 120))
+        faces = blaze_detect(frame)
         # 如果检测到人脸
-        if len(faces) > 0:
+        if faces is not None and len(faces) > 0:
             for (x, y, w, h) in faces:
                 face = frame_gray[y: y + h, x: x + w]  # 脸部图片
                 faces = generate_faces(face)
@@ -89,7 +91,7 @@ def predict_expression():
                 frame = cv2_img_add_text(frame, emotion, x+30, y+30, font_color, 20)
                 # puttext中文显示问题
                 # cv2.putText(frame, emotion, (x + 30, y + 30), cv2.FONT_HERSHEY_SIMPLEX, 1, font_color, 4)
-        cv2.imshow("expression recognition(press esc to exit)", frame)  # 利用人眼假象
+        cv2.imshow("expression recognition(press esc to exit)", cv2.cvtColor(frame, cv2.COLOR_RGB2BGR))  # 利用人眼假象
 
         key = cv2.waitKey(30)  # 等待30ms，返回ASCII码
 

@@ -1,8 +1,22 @@
 # 人脸表情识别
 
+## 更新日志
 
-> 2020.8.22，重构了整个仓库代码，改用Tensorflow2中的keras api实现整个系统。考虑到很多反映jupyter notebook写的train使用起来不太方便，这里改成了py脚本实现。
-> 2020.12.18，根据反馈，修改了Jaffe的优化器设置。
+### v0.1
+
+基于TensorFlow1.x的人脸表情识别项目。
+
+### v0.2
+
+2020.8.22，重构了整个仓库代码，改用Tensorflow2中的keras api实现整个系统。考虑到很多反映jupyter notebook写的train使用起来不太方便，这里改成了py脚本实现。
+
+### v0.3
+
+2020.12.18，根据反馈，修改了Jaffe的优化器设置。
+
+### v0.4 
+
+增加了人脸检测器blazeface。
 
 
 ## 简介
@@ -14,10 +28,10 @@
 ```shell script
 git clone https://github.com/luanshiyinyang/FacialExpressionRecognition.git
 cd FacialExpressionRecognition
-conda create -n FER python=3.6
-source activate FER
-conda install cudatoolkit=10.1
-conda install cudnn=7.6.5
+conda create -n FER python=3.6 -y
+conda activate FER
+conda install cudatoolkit=10.1 -y
+conda install cudnn=7.6.5 -y
 pip install -r requirements.txt
 ```
 如果你是Linux用户，直接执行根目录下的`env.sh`即可一键配置环境，执行命令为`bash env.sh`。
