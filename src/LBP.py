@@ -135,14 +135,14 @@ def evaluate_lbp(data_op=1, op=1, reduction=1, rate=0.2):
     test1 = []
     test2 = []
     if data_op == 2:
-        _, x, y = Fer2013().gen_valid_no(1)
+        _, x, y = Fer2013().gen_valid_no()
         for i in tqdm(np.arange(0, x.shape[0], 1)):
             res = LBP().get_lbp(x[i])
             res = np.array(res).reshape(-1)
             res = np.append(res, y[i])
             test1.append(res)
 
-        _, x, y = Fer2013().gen_valid_no(2)
+        _, x, y = Fer2013().gen_valid_no()
         for i in tqdm(np.arange(0, x.shape[0], 1)):
             res = LBP().get_lbp(x[i])
             res = np.array(res).reshape(-1)
