@@ -81,6 +81,10 @@ def predict_expression():
         # 如果检测到人脸
         if faces is not None and len(faces) > 0:
             for (x, y, w, h) in faces:
+                x = max(0, x)
+                y = max(0, y)
+                w = min(w, frame_gray.shape[1] - x)
+                h = min(h, frame_gray.shape[0] - y)
                 face = frame_gray[y: y + h, x: x + w]  # 脸部图片
                 faces = generate_faces(face)
                 results = model.predict(faces)
